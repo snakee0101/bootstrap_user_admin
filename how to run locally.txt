@@ -2,4 +2,8 @@ in this directory run:
 
 1. php -S localhost:8000
 2. npm run dev
-3. Go to the localhost:8000/index.php
+3. initialize database:
+    3.0. adjust connection settings in database/connection.php
+    3.1. run database/create_table.php
+    3.2. run database/seeder.php
+4. Go to the localhost:8000/index.php to see the result
