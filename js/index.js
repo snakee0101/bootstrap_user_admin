@@ -11,7 +11,7 @@ function showDeleteUserConfirmation(user_record_id)
 
 function getStatusClassname(is_active)
 {
-    return is_active == 1 ? 'circle-green' : 'circle-grey';
+    return is_active == 1 ? 'text-success' : 'text-secondary';
 }
 
 $( document ).ready(function() {
@@ -34,7 +34,7 @@ $( document ).ready(function() {
                 </th>
                 <td>${user_record.first_name} ${user_record.last_name}</td>
                 <td>
-                    <span class="circle ${getStatusClassname(user_record.status)}"></span>
+                    <i class="bi bi-circle-fill ${getStatusClassname(user_record.status)}"></i>
                 </td>
                 <td>${user_record.role}</td>
                 <td>
