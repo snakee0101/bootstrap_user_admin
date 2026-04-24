@@ -1,0 +1,13 @@
+.circle {
+    display: inline-block;
+    border: 10px solid black;
+    border-radius: 50%;
+}
+
+.circle-green {
+    border-color: green;
+}
+
+.circle-grey {
+    border-color: gray;
+}

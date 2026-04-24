@@ -1,9 +1,47 @@
 //1. Get Initial data
+function editUserDialog(user_record_id)
+{
+    alert('edit dialog ' + user_record_id);
+}
 
-let users = [];
+function showDeleteUserConfirmation(user_record_id)
+{
+    alert('show delete confirmation for ' + user_record_id);
+}
 
-$.post("http://localhost:8000/queries/get_all_users.php", (data) => {
-    users = data;
+function getStatusClassname(is_active)
+{
+    return is_active == 1 ? 'circle-green' : 'circle-grey';
+}
 
-    console.log(users);
+$( document ).ready(function() {
+    let users = [];
+
+    $.post("http://localhost:8000/queries/get_all_users.php", (data) => {
+        users = JSON.parse(data);
+
+        //{"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
+
+        for (const user_record of users)
+        {
+            console.log(user_record);
+
+            $("#users_table tbody").append(`<tr data-id="${user_record.id}">
+                <th>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="">
+                    </div>
+                </th>
+                <td>${user_record.first_name} ${user_record.last_name}</td>
+                <td>
+                    <span class="circle ${getStatusClassname(user_record.status)}"></span>
+                </td>
+                <td>${user_record.role}</td>
+                <td>
+                    <button type="button" class="btn btn-dark btn-sm" onclick="editUserDialog(${user_record.id})">Edit</button>
+                    <button type="button" class="btn btn-dark btn-sm" onclick="showDeleteUserConfirmation(${user_record.id})">Delete</button>
+                </td>
+            </tr>`);
+        }
+    });
 });

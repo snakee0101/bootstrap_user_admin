@@ -17,7 +17,7 @@
     <script src="js/index.js"></script>
 </head>
 <body>
-    <table class="table">
+    <table class="table" id="users_table">
         <thead>
             <tr>
                 <th scope="col">
@@ -35,17 +35,6 @@
             </tr>
         </thead>
         <tbody>
-            <!--<tr>
-                <th>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="">
-                    </div>
-                </th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-            </tr>-->
         </tbody>
     </table>
 
