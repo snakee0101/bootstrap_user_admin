@@ -1,0 +1,5 @@
+in this directory run:
+
+1. php -S localhost:8000
+2. npm run dev
+3. Go to the localhost:8000/index.php
