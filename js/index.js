@@ -12,8 +12,6 @@ function deleteUser() {
 
         console.log(users);
     });
-
-
 }
 
 function editUserDialog(user_record_id) {
@@ -52,8 +50,15 @@ $(document).ready(function () {
             </tr>`);
         }
 
+        //TODO: ADD NEW EVENT LISTENERS FOR ALL INPUT EVENTS INSIDE A TABLE WHEN NEW ROW IS ADDED
         $(".user-selection").change(event => {
-             console.log(event.target.value + event.target.checked);
+             if(event.target.checked) {
+                 selected_user_ids.push(event.target.value);
+             } else {
+                 selected_user_ids.splice(selected_user_ids.findIndex(id => id == event.target.value), 1);
+             }
+
+             console.log(selected_user_ids);
         });
     });
 
