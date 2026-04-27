@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser()">Delete</button>
                 </div>
             </div>
         </div>

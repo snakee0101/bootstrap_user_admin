@@ -7,6 +7,12 @@ function getStatusClassname(is_active) {
     return is_active == 1 ? 'text-success' : 'text-secondary';
 }
 
+function deleteUser() {
+    const user_id = $("#deleteUserConfirmation").attr("data-user-id");
+
+    alert("user with id " + user_id + "will be deleted");
+}
+
 $(document).ready(function () {
     let users = [];
 
