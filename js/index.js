@@ -1,11 +1,5 @@
-//1. Get Initial data
-function editUserDialog(user_record_id) {
-    alert('edit dialog ' + user_record_id);
-}
-
-function getStatusClassname(is_active) {
-    return is_active == 1 ? 'text-success' : 'text-secondary';
-}
+let users = [];
+let selected_user_ids = [];
 
 function deleteUser() {
     const user_id = $("#deleteUserConfirmation").attr("data-user-id");
@@ -14,12 +8,23 @@ function deleteUser() {
         $('#deleteUserConfirmation').modal('hide');
 
         $(`#users_table tbody tr[data-id=${user_id}]`).remove();
+        users.splice(users.indexOf(users.find(user => user.id == user_id)), 1);
+
+        console.log(users);
     });
+
+
+}
+
+function editUserDialog(user_record_id) {
+    alert('edit dialog ' + user_record_id);
+}
+
+function getStatusClassname(is_active) {
+    return is_active == 1 ? 'text-success' : 'text-secondary';
 }
 
 $(document).ready(function () {
-    let users = [];
-
     //preload all users
     $.post("http://localhost:8000/queries/get_all_users.php", (data) => {
         users = JSON.parse(data);
@@ -32,7 +37,7 @@ $(document).ready(function () {
             $("#users_table tbody").append(`<tr data-id="${user_record.id}">
                 <th>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="">
+                        <input class="form-check-input user-selection" type="checkbox" value="${user_record.id}">
                     </div>
                 </th>
                 <td>${user_record.first_name} ${user_record.last_name}</td>
@@ -46,6 +51,10 @@ $(document).ready(function () {
                 </td>
             </tr>`);
         }
+
+        $(".user-selection").change(event => {
+             console.log(event.target.value + event.target.checked);
+        });
     });
 
     //user deletion modal
