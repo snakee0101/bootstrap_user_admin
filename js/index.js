@@ -27,11 +27,9 @@ $(document).ready(function () {
     $.post("http://localhost:8000/queries/get_all_users.php", (data) => {
         users = JSON.parse(data);
 
-        //{"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
-
+        //user record structure: {"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
+        //Prefill users table with initial data
         for (const user_record of users) {
-            console.log(user_record);
-
             $("#users_table tbody").append(`<tr data-id="${user_record.id}">
                 <th>
                     <div class="form-check">
@@ -51,14 +49,53 @@ $(document).ready(function () {
         }
 
         //TODO: ADD NEW EVENT LISTENERS FOR ALL INPUT EVENTS INSIDE A TABLE WHEN NEW ROW IS ADDED
+        //Save/remove selected user id to/from array when checking/unchecking a checkbox in the table
         $(".user-selection").change(event => {
+            //track selected user ids
              if(event.target.checked) {
                  selected_user_ids.push(event.target.value);
              } else {
-                 selected_user_ids.splice(selected_user_ids.findIndex(id => id == event.target.value), 1);
+                 selected_user_ids.splice(
+                     selected_user_ids.findIndex(id => id == event.target.value),
+                     1
+                 );
              }
 
-             console.log(selected_user_ids);
+             //check "Select All checkbox" if all items are checked
+            if($(`#users_table .user-selection:checked`).length === $(`#users_table .user-selection`).length) {
+                //if all items are checked - manually check "Select All" checkbox (if it is not checked yet - otherwise we end up in infinite loop)
+                if($("#selectAll").is(':checked') === false) {
+                    $("#selectAll").click();
+                }
+            } else {
+                //uncheck "Select All checkbox" if any item is unchecked (if it is not unchecked yet - otherwise we end up in infinite loop)
+                if($("#selectAll").is(':checked') === true) {
+                    $("#selectAll").click();
+                }
+            }
+
+            console.log(selected_user_ids);
+        });
+
+        //When "Select All" checkbox ends up is checked state - manually click on those checkboxes that are unchecked (so it works only one-way)
+        $("#selectAll").change(event => {
+            const targetCheckedState = event.target.checked;
+
+            //when Select All checkbox is unchecked no selection should be lost
+            if(targetCheckedState === false) {
+                return;
+            }
+
+            $("#users_table tbody tr").each(function() {
+                const current_user_id = $(this).attr("data-id");
+
+                const actualCheckedState = $(`#users_table tbody tr[data-id="${current_user_id}"] .user-selection`).is(':checked');
+
+                //if intended checkbox state is incorrect - invert it forcefully, thereby triggering an event that adds an id to selected users array
+                if(actualCheckedState != targetCheckedState) {
+                    $(`#users_table tbody tr[data-id="${current_user_id}"] .user-selection`).click();
+                }
+            });
         });
     });
 
