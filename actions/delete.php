@@ -11,5 +11,5 @@ if($count === 0) {
 } else {
     executeQuery("DELETE FROM users WHERE id = ?;", [$_GET["user_id"]]);
 
-    echo "{status: true, error:null, id: " . $_GET["user_id"] . "}";
+    echo "{status: true, error: null, id: " . $_GET["user_id"] . "}";
 }
