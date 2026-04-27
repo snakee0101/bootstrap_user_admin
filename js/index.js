@@ -10,7 +10,7 @@ function getStatusClassname(is_active) {
 function deleteUser() {
     const user_id = $("#deleteUserConfirmation").attr("data-user-id");
 
-    alert("user with id " + user_id + "will be deleted");
+    $.post("http://localhost:8000/actions/delete.php?user_id=" + user_id)
 }
 
 $(document).ready(function () {
