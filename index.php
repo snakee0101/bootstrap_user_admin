@@ -4,7 +4,7 @@
     <title>User management system</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- Bootstrap Icons -->
@@ -38,7 +38,9 @@
         </div>
     </div>
 
-    <table class="table" id="users_table">
+    <?php include "form_controls.php" ?>
+
+    <table class="table table-sm my-2" id="users_table">
         <thead>
             <tr>
                 <th scope="col">
@@ -58,6 +60,8 @@
         <tbody>
         </tbody>
     </table>
+
+    <?php include "form_controls.php" ?>
 
 </body>
 </html>
