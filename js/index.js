@@ -1,29 +1,22 @@
 //1. Get Initial data
-function editUserDialog(user_record_id)
-{
+function editUserDialog(user_record_id) {
     alert('edit dialog ' + user_record_id);
 }
 
-function showDeleteUserConfirmation(user_record_id)
-{
-    alert('show delete confirmation for ' + user_record_id);
-}
-
-function getStatusClassname(is_active)
-{
+function getStatusClassname(is_active) {
     return is_active == 1 ? 'text-success' : 'text-secondary';
 }
 
-$( document ).ready(function() {
+$(document).ready(function () {
     let users = [];
 
+    //preload all users
     $.post("http://localhost:8000/queries/get_all_users.php", (data) => {
         users = JSON.parse(data);
 
         //{"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
 
-        for (const user_record of users)
-        {
+        for (const user_record of users) {
             console.log(user_record);
 
             $("#users_table tbody").append(`<tr data-id="${user_record.id}">
@@ -39,9 +32,26 @@ $( document ).ready(function() {
                 <td>${user_record.role}</td>
                 <td>
                     <button type="button" class="btn btn-dark btn-sm" onclick="editUserDialog(${user_record.id})">Edit</button>
-                    <button type="button" class="btn btn-dark btn-sm" onclick="showDeleteUserConfirmation(${user_record.id})">Delete</button>
+                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${user_record.id}" data-bs-username="${user_record.first_name} ${user_record.last_name}">Delete</button>
                 </td>
             </tr>`);
         }
     });
+
+    //user deletion modal
+    const userDeletionConfirmationModal= document.getElementById('deleteUserConfirmation');
+
+    if (userDeletionConfirmationModal) {
+        userDeletionConfirmationModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const user_id= button.getAttribute('data-bs-user-id')
+            const username = button.getAttribute('data-bs-username');
+
+            // Update the modal's content.
+            const usernamePlaceholder = userDeletionConfirmationModal.querySelector('.userNameToDelete')
+
+            usernamePlaceholder.textContent = `"${username}"`;
+            userDeletionConfirmationModal.setAttribute('data-user-id', user_id);
+        })
+    }
 });
