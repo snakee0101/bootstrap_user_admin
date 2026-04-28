@@ -61,8 +61,6 @@ class UserReactiveCollection
                     $("#selectAll").click();
                 }
             }
-
-            console.log(selected_user_ids);
         });
     }
 
@@ -142,11 +140,43 @@ function registerGlobalEvents()
     });
 }
 
+/**
+* Validates the selected rows and action and returns true if they are valid
+* */
+function validateGroupAction(selected_action, user_ids)
+{
+    let message = "";
+
+    if(user_ids.length === 0) {
+        message += "<p>Select at least one user to perform the action on</p>";
+    }
+
+    if(selected_action === "") {
+        message += "<p>Select an action to perform</p>";
+    }
+
+    if(message !== "") {
+        $("#errorAlert .modal-body").html(message);
+
+        const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
+        errorModal.show();
+
+        return false;
+    }
+
+    return true;
+}
+
 function groupAction(group_action_id)
 {
     //group_action_id is used to find in which panel - top or bottom, the action was called to target the specific select-box
     const selected_action = $(`.group-action[data-group-action-id=${group_action_id}] select`).val(); //actions are one of ["", "activate", "deactivate", "delete"]
-    alert(selected_action);
+
+    if(validateGroupAction(selected_action, selected_user_ids) === false) {
+        return;
+    }
+
+    alert("only valid action");
 }
 
 $(document).ready(function () {
