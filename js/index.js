@@ -81,17 +81,14 @@ class UserReactiveCollection
 
     remove(user_id)
     {
-        $.post("http://localhost:8000/actions/delete.php?user_id=" + user_id, (data) => {
-            $('#deleteUserConfirmation').modal('hide');
+        //remove array item
+        this.users.splice(
+            this.users.indexOf(
+                this.users.find(user => user.id == user_id)
+            ), 1
+        );
 
-            //remove the table row and the array item
-            $(`#users_table tbody tr[data-id=${user_id}]`).remove();
-            this.users.splice(
-                this.users.indexOf(
-                    this.users.find(user => user.id == user_id)
-                ), 1
-            );
-        });
+        $(`#users_table tbody tr[data-id=${user_id}]`).remove(); //as well as the table row
     }
 }
 
@@ -102,7 +99,12 @@ let userCollection = new UserReactiveCollection();
 function deleteUser()
 {
     const user_id = $("#deleteUserConfirmation").attr("data-user-id");
-    userCollection.remove(user_id);
+
+    $.post("http://localhost:8000/actions/delete.php?user_id=" + user_id, (data) => {
+        $('#deleteUserConfirmation').modal('hide');
+
+        userCollection.remove(user_id);
+    });
 }
 
 function editUserDialog(user_record_id)
@@ -215,7 +217,22 @@ function groupAction(group_action_id)
     }
 
     if(selected_action === "delete") {
+        $.post(`http://localhost:8000/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
+            const response = JSON.parse(data);
 
+            if(response.status != true) {
+                $("#errorAlert .modal-body").html(response.error);
+                const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
+                errorModal.show();
+
+                return false;
+            }
+
+            for (const user_id of selected_user_ids)
+            {
+                userCollection.remove(user_id); //patch each record
+            }
+        })
     }
 }
 
