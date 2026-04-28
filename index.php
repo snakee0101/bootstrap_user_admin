@@ -20,6 +20,24 @@
     <script src="js/index.js"></script>
 </head>
 <body>
+    <div class="modal" id="userMassDeletionConfirmation" tabindex="-1" data-user-id="0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User mass-deletion confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure to delete the selected users?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="massDeleteUsers()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="deleteUserConfirmation" tabindex="-1" data-user-id="0">
         <div class="modal-dialog">
             <div class="modal-content">

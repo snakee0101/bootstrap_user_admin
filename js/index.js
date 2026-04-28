@@ -158,8 +158,8 @@ function registerGlobalEvents()
 }
 
 /**
-* Validates the selected rows and action and returns true if they are valid
-* */
+ * Validates the selected rows and action and returns true if they are valid
+ * */
 function validateGroupAction(selected_action, user_ids)
 {
     let message = "";
@@ -182,6 +182,34 @@ function validateGroupAction(selected_action, user_ids)
     }
 
     return true;
+}
+
+function massDeleteUsers()
+{
+    $.post(`http://localhost:8000/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
+        const response = JSON.parse(data);
+
+        if(response.status != true) {
+            $("#errorAlert .modal-body").html(response.error);
+            const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
+            errorModal.show();
+
+            return false;
+        }
+
+        for (const user_id of selected_user_ids)
+        {
+            userCollection.remove(user_id); //patch each record
+        }
+
+        const confirmationModal = bootstrap.Modal.getInstance(
+            document.getElementById('userMassDeletionConfirmation')
+        );
+        confirmationModal.hide();
+
+        selected_user_ids = [];
+        $("#selectAll").prop('checked', false);
+    })
 }
 
 function groupAction(group_action_id)
@@ -217,22 +245,8 @@ function groupAction(group_action_id)
     }
 
     if(selected_action === "delete") {
-        $.post(`http://localhost:8000/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
-            const response = JSON.parse(data);
-
-            if(response.status != true) {
-                $("#errorAlert .modal-body").html(response.error);
-                const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
-                errorModal.show();
-
-                return false;
-            }
-
-            for (const user_id of selected_user_ids)
-            {
-                userCollection.remove(user_id); //patch each record
-            }
-        })
+        const confirmationModal = new bootstrap.Modal(document.getElementById('userMassDeletionConfirmation'), {});
+        confirmationModal.show();
     }
 }
 
