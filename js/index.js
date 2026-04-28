@@ -2,7 +2,7 @@ let selected_user_ids = [];
 
 class UserReactiveCollection
 {
-    users = [];
+    users = []; //its a Map - only one copy of a record with specific id is allowed
 
     constructor(users = [])
     {
@@ -12,12 +12,23 @@ class UserReactiveCollection
     set(record)
     {
         //user record structure: {"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
-        this.users.push(record); //add record to collection
+        //Add a record to collection. users array must behave like a set (unique by user id)
+        const index = this.users.findIndex(user => user.id == record.id);
+
+        if (index === -1) {
+            this.users.push(record); // new
+        } else {
+            this.users[index] = record; // replace existing
+        }
+
+        //update table rows
+        //checked state must be preserved when updating the table
+        let checked = selected_user_ids.indexOf(record.id) !== -1 ? 'checked' : '';
 
         const updatedRowContent = `
           <th>
             <div class="form-check">
-                <input class="form-check-input user-selection" type="checkbox" value="${record.id}">
+                <input class="form-check-input user-selection" type="checkbox" value="${record.id}" ${checked}/>
             </div>
           </th>
           <td>${record.first_name} ${record.last_name}</td>
@@ -30,7 +41,6 @@ class UserReactiveCollection
             <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${record.id}" data-bs-username="${record.first_name} ${record.last_name}">Delete</button>
           </td>`;
 
-        //update table rows
         if($(`#users_table tbody tr[data-id="${record.id}"]`).length === 0) {
             $("#users_table tbody").append(`<tr data-id="${record.id}">${updatedRowContent}</tr>`); //if the row with this user id doesn't exist in the table - create a row
         } else {
@@ -38,13 +48,13 @@ class UserReactiveCollection
         }
 
         //re-register user selection event for new row
-        $(`#users_table tbody tr[data-id="${record.id}"] .user-selection`).change((event) => {
+        $(`#users_table tbody tr[data-id="${record.id}"] .user-selection`).off('change').change((event) => {
             //track selected user ids - Save/remove selected user id to/from array when checking/unchecking a checkbox in the table
             if(event.target.checked) {
-                selected_user_ids.push(event.target.value);
+                selected_user_ids.push(Number(event.target.value));
             } else {
                 selected_user_ids.splice(
-                    selected_user_ids.findIndex(id => id == event.target.value),
+                    selected_user_ids.findIndex(id => id == Number(event.target.value)),
                     1
                 );
             }
@@ -62,6 +72,11 @@ class UserReactiveCollection
                 }
             }
         });
+    }
+
+    get(user_id)
+    {
+        return this.users.find(user => user.id == user_id);
     }
 
     remove(user_id)
@@ -176,7 +191,32 @@ function groupAction(group_action_id)
         return;
     }
 
-    alert("only valid action");
+    if(selected_action === "activate" || selected_action === "deactivate") {
+        const is_active = selected_action === "activate" ? 1 : 0;
+
+        $.post(`http://localhost:8000/group_actions/modify_active.php?status=${is_active}&users=` + selected_user_ids.join(','), (data) => {
+            const response = JSON.parse(data);
+
+            if(response.status != true) {
+                $("#errorAlert .modal-body").html(response.error);
+                const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
+                errorModal.show();
+
+                return false;
+            }
+
+            for (const user_id of selected_user_ids)
+            {
+                //patch each record
+                let user_record = userCollection.get(user_id);
+                userCollection.set({...user_record, status: is_active});
+            }
+        })
+    }
+
+    if(selected_action === "delete") {
+
+    }
 }
 
 $(document).ready(function () {
