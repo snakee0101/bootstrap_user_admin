@@ -38,7 +38,22 @@
         </div>
     </div>
 
-    <?php include "form_controls.php" ?>
+    <div class="modal" id="errorAlert" tabindex="-1" data-user-id="0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php $group_action_id = 1; include "form_controls.php" ?>
 
     <table class="table table-sm my-2" id="users_table">
         <thead>
@@ -61,7 +76,7 @@
         </tbody>
     </table>
 
-    <?php include "form_controls.php" ?>
+    <?php $group_action_id = 2; include "form_controls.php" ?>
 
 </body>
 </html>

@@ -142,6 +142,13 @@ function registerGlobalEvents()
     });
 }
 
+function groupAction(group_action_id)
+{
+    //group_action_id is used to find in which panel - top or bottom, the action was called to target the specific select-box
+    const selected_action = $(`.group-action[data-group-action-id=${group_action_id}] select`).val(); //actions are one of ["", "activate", "deactivate", "delete"]
+    alert(selected_action);
+}
+
 $(document).ready(function () {
     registerGlobalEvents();
 
