@@ -37,7 +37,7 @@ class UserReactiveCollection
           </td>
           <td>${record.role}</td>
           <td>
-            <button type="button" class="btn btn-dark btn-sm" onclick="editUserDialog(${record.id})">Edit</button>
+            <button type="button" class="btn btn-dark btn-sm" onclick="openUserRecordModal(${record.id})">Edit</button>
             <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${record.id}" data-bs-username="${record.first_name} ${record.last_name}">Delete</button>
           </td>`;
 
@@ -105,11 +105,6 @@ function deleteUser()
 
         userCollection.remove(user_id);
     });
-}
-
-function editUserDialog(user_record_id)
-{
-    alert('edit dialog ' + user_record_id);
 }
 
 function getStatusClassname(is_active)
@@ -250,9 +245,9 @@ function groupAction(group_action_id)
     }
 }
 
-function openUserRecordModal(user_record = null)
+function openUserRecordModal(user_id = null)
 {
-    if(user_record == null) {
+    if(user_id == null) {
         //in case we are adding a record - clear modal fields and errors and change the modal title
         $("#userRecord .modal-title").text("Create user");
         $("#userRecord").attr("data-user-record-id", "");
@@ -262,7 +257,16 @@ function openUserRecordModal(user_record = null)
         $("#user-record-form #user-status").val('1');
         $("#user-record-form #user-role").val('user');
     } else {
+        let user_record = userCollection.get(user_id);
+
         //in case we are editing a record - prefill
+        $("#userRecord .modal-title").text("Edit user");
+        $("#userRecord").attr("data-user-record-id", user_record.id);
+
+        $("#user-record-form #user-first-name").val(user_record.first_name);
+        $("#user-record-form #user-last-name").val(user_record.last_name);
+        $("#user-record-form #user-status").val(user_record.status);
+        $("#user-record-form #user-role").val(user_record.role);
     }
 
     const userRecordModal = new bootstrap.Modal(document.getElementById('userRecord'), {});
@@ -344,7 +348,8 @@ $(document).ready(function () {
             userRecordModal.hide();
 
             const successAlertModal = new bootstrap.Modal(document.getElementById('successAlert'), {});
-            $("#successAlert .modal-body").text("The user was successfully created");
+            const modalText = is_creation_form ? "The user was successfully created" : "The user was successfully updated";
+            $("#successAlert .modal-body").text(modalText);
             successAlertModal.show();
 
             userCollection.set(response.user);
