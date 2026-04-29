@@ -250,8 +250,104 @@ function groupAction(group_action_id)
     }
 }
 
+function openUserRecordModal(user_record = null)
+{
+    if(user_record == null) {
+        //in case we are adding a record - clear modal fields and errors and change the modal title
+        $("#userRecord .modal-title").text("Create user");
+        $("#userRecord").attr("data-user-record-id", "");
+
+        $("#user-record-form #user-first-name").val('');
+        $("#user-record-form #user-last-name").val('');
+        $("#user-record-form #user-status").val('1');
+        $("#user-record-form #user-role").val('user');
+    } else {
+        //in case we are editing a record - prefill
+    }
+
+    const userRecordModal = new bootstrap.Modal(document.getElementById('userRecord'), {});
+    userRecordModal.show();
+}
+
 $(document).ready(function () {
     registerGlobalEvents();
+
+    //user management form needs to be modified to be able to be validated manually
+    $("#user-record-form").on("submit", function(event) {
+        const form = this;   // DOM element access
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        //clear all errors before sending the form
+        $("#user-record-form #user-first-name").removeClass('border-danger');
+        $("#user-record-form #user-first-name ~ .invalid-feedback").hide();
+
+        $("#user-record-form #user-last-name").removeClass('border-danger');
+        $("#user-record-form #user-last-name ~ .invalid-feedback").hide();
+
+        $("#user-record-form #user-status").removeClass('border-danger');
+        $("#user-record-form #user-status ~ .invalid-feedback").hide();
+
+        $("#user-record-form #user-role").removeClass('border-danger');
+        $("#user-record-form #user-role ~ .invalid-feedback").hide();
+
+        //if no user id is specified - then we are creating a new record
+        const is_creation_form = $("#userRecord").attr("data-user-record-id") == "";
+
+        const form_url = is_creation_form ? "http://localhost:8000/actions/create.php" : "http://localhost:8000/actions/update.php";
+        let form_data = {
+            first_name: $("#user-record-form #user-first-name").val(),
+            last_name: $("#user-record-form #user-last-name").val(),
+            status: $("#user-record-form #user-status").val(),
+            role: $("#user-record-form #user-role").val()
+        };
+
+        if(is_creation_form === false) {
+            form_data.user_record_id = $("#userRecord").attr("data-user-record-id");
+        }
+
+        $.post(form_url, form_data, (data) => {
+            const response = JSON.parse(data);
+
+            if(Number(response.error_code) !== 0) {
+                if(response.errors['first_name']) {
+                    $("#user-record-form #user-first-name").addClass('border-danger');
+                    $("#user-record-form #user-first-name ~ .invalid-feedback").text(response.errors['first_name']);
+                    $("#user-record-form #user-first-name ~ .invalid-feedback").show();
+                }
+
+                if(response.errors['last_name']) {
+                    $("#user-record-form #user-last-name").addClass('border-danger');
+                    $("#user-record-form #user-last-name ~ .invalid-feedback").text(response.errors['last_name']);
+                    $("#user-record-form #user-last-name ~ .invalid-feedback").show();
+                }
+
+                if(response.errors['status']) {
+                    $("#user-record-form #user-status").addClass('border-danger');
+                    $("#user-record-form #user-status ~ .invalid-feedback").text(response.errors['status']);
+                    $("#user-record-form #user-status ~ .invalid-feedback").show();
+                }
+
+                if(response.errors['role']) {
+                    $("#user-record-form #user-role").addClass('border-danger');
+                    $("#user-record-form #user-role ~ .invalid-feedback").text(response.errors['role']);
+                    $("#user-record-form #user-role ~ .invalid-feedback").show();
+                }
+
+                return;
+            }
+
+            const userRecordModal = bootstrap.Modal.getInstance(
+                document.getElementById('userRecord')
+            );
+            userRecordModal.hide();
+
+            const successAlertModal = new bootstrap.Modal(document.getElementById('successAlert'), {});
+            $("#successAlert .modal-body").text("The user was successfully created");
+            successAlertModal.show();
+        });
+    });
 
     //load initial data - Prefill users table with initial data
     $.post("http://localhost:8000/queries/get_all_users.php", (data) => {

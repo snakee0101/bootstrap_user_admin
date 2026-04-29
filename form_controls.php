@@ -2,7 +2,7 @@
 
 echo <<<ACTION
 <div class="d-flex justify-content-between">
-    <button type="button" class="btn btn-success btn-sm">Add</button>
+    <button type="button" class="btn btn-success btn-sm" onclick="openUserRecordModal()">Add</button>
     <div class="d-flex justify-content-between gap-2 group-action" data-group-action-id="$group_action_id">
         <select class="form-control-sm w-100">
             <option value="">-Please Select-</option>

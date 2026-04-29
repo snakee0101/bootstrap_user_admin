@@ -74,6 +74,73 @@
         </div>
     </div>
 
+    <div class="modal" id="successAlert" tabindex="-1" data-user-id="0">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">
+                        <i class="bi bi-check2-circle"></i>
+                        Success
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="userRecord" tabindex="-1" data-user-record-id="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="row g-3" id="user-record-form" novalidate>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="user-first-name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="user-first-name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="user-last-name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="user-last-name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <label for="user-status" class="form-label">Status</label>
+                                <select class="form-select" id="user-status">
+                                    <option selected value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="user-role" class="form-label">Role</label>
+                                <select class="form-select" id="user-role">
+                                    <option selected value="user">user</option>
+                                    <option value="admin">admin</option>
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <?php $group_action_id = 1; include "form_controls.php" ?>
 
     <table class="table table-sm my-2" id="users_table">
