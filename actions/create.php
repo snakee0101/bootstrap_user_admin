@@ -31,10 +31,21 @@ if(empty($errors) === false) {
     return;
 }
 
+//TODO: Maybe make a UNIQUE constraint on the database level
+
 //create and return a record
+executeStatement("INSERT INTO users(`first_name`, `last_name`, `status`, `role`) VALUES (?, ?, ?, ?);", $query_parameters = [$_POST['first_name'], $_POST['last_name'], (int)$_POST['status'], $_POST['role']]);
+$result = executeQuery("SELECT id FROM users WHERE first_name = ? AND last_name = ? AND status = ? AND role = ?", [$_POST['first_name'], $_POST['last_name'], (int)$_POST['status'], $_POST['role']]);
+
 echo json_encode([
     "status" => true,
     "error_code" => 0,
     "errors" => null,
-    "user" => []
+    "user" => [
+        "id" => $result[0]["id"],
+        "first_name" => $_POST['first_name'],
+        "last_name" => $_POST['last_name'],
+        "status" => $_POST['status'],
+        "role" => $_POST['role']
+    ]
 ]);

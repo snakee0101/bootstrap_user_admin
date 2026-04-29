@@ -346,6 +346,8 @@ $(document).ready(function () {
             const successAlertModal = new bootstrap.Modal(document.getElementById('successAlert'), {});
             $("#successAlert .modal-body").text("The user was successfully created");
             successAlertModal.show();
+
+            userCollection.set(response.user);
         });
     });
 

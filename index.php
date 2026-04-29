@@ -143,7 +143,7 @@
 
     <?php $group_action_id = 1; include "form_controls.php" ?>
 
-    <table class="table table-sm my-2" id="users_table">
+    <table class="table table-sm table-hover my-2" id="users_table">
         <thead>
             <tr>
                 <th scope="col">
