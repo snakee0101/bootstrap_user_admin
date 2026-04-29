@@ -36,9 +36,9 @@ class UserReactiveCollection
               <i class="bi bi-circle-fill ${getStatusClassname(record.status)}"></i>
           </td>
           <td>${record.role}</td>
-          <td>
-            <button type="button" class="btn btn-dark btn-sm" onclick="openUserRecordModal(${record.id})">Edit</button>
-            <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${record.id}" data-bs-username="${record.first_name} ${record.last_name}">Delete</button>
+          <td class="d-flex gap-3">
+            <a href="#" onclick="openUserRecordModal(${record.id})" class="mr-4"><i class="bi bi-pencil-square"></i></a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${record.id}" data-bs-username="${record.first_name} ${record.last_name}"><i class="bi bi-trash3 text-danger"></i></a>
           </td>`;
 
         if($(`#users_table tbody tr[data-id="${record.id}"]`).length === 0) {
