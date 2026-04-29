@@ -185,7 +185,7 @@ function massDeleteUsers()
         const response = JSON.parse(data);
 
         if(response.status != true) {
-            $("#errorAlert .modal-body").html(response.error);
+            $("#errorAlert .modal-body").html(response.error.message);
             const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
             errorModal.show();
 
@@ -223,7 +223,7 @@ function groupAction(group_action_id)
             const response = JSON.parse(data);
 
             if(response.status != true) {
-                $("#errorAlert .modal-body").html(response.error);
+                $("#errorAlert .modal-body").html(response.error.message);
                 const errorModal = new bootstrap.Modal(document.getElementById('errorAlert'), {});
                 errorModal.show();
 
