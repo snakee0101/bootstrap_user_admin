@@ -121,18 +121,11 @@ function registerGlobalEvents()
     });
 
     //user deletion modal
-    const userDeletionConfirmationModal= document.getElementById('deleteUserConfirmation');
+    $("#deleteUserConfirmation").on('show.bs.modal', function(event) {
+        const username = $(event.relatedTarget).attr('data-bs-username');
 
-    userDeletionConfirmationModal.addEventListener('show.bs.modal', event => {
-        const button = event.relatedTarget
-        const user_id= button.getAttribute('data-bs-user-id')
-        const username = button.getAttribute('data-bs-username');
-
-        // Update the modal's content.
-        const usernamePlaceholder = userDeletionConfirmationModal.querySelector('.userNameToDelete')
-
-        usernamePlaceholder.textContent = `"${username}"`;
-        userDeletionConfirmationModal.setAttribute('data-user-id', user_id);
+        $(this).find('.userNameToDelete').text(`"${username}"`);
+        $(this).attr('data-user-id', $(event.relatedTarget).attr('data-bs-user-id'));
     });
 }
 
