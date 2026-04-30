@@ -99,22 +99,16 @@ function getStatusClassname(is_active)
 function registerGlobalEvents()
 {
     //When "Select All" checkbox ends up is checked state - manually click on those checkboxes that are unchecked (so it works only one-way)
-    $("#selectAll").change(event => {
+    $("#selectAll").change(function (event) {
         const targetCheckedState = event.target.checked;
 
-        //when Select All checkbox is unchecked no selection should be lost
-        if(targetCheckedState === false) {
-            return;
+        if (targetCheckedState === false) {
+            return;  //when Select All checkbox is unchecked no selection should be lost
         }
 
-        $("#users_table tbody tr").each(function() {
-            const current_user_id = $(this).attr("data-id");
-
-            const actualCheckedState = $(`#users_table tbody tr[data-id="${current_user_id}"] .user-selection`).is(':checked');
-
-            //if intended checkbox state is incorrect - invert it forcefully, thereby triggering an event that adds an id to selected users array
-            if(actualCheckedState != targetCheckedState) {
-                $(`#users_table tbody tr[data-id="${current_user_id}"] .user-selection`).click();
+        $("#users_table .user-selection").each(function () {
+            if (this.checked === false) {
+                $(this).prop("checked", true).trigger("change");
             }
         });
     });
