@@ -87,6 +87,7 @@ function deleteUser()
         $('#deleteUserConfirmation').modal('hide');
 
         userCollection.remove(user_id);
+        selected_user_ids = [];
     });
 }
 
