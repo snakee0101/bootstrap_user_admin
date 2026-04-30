@@ -247,8 +247,12 @@ function groupAction(group_action_id)
 
 function openUserRecordModal(user_id = null)
 {
+    //clear all errors on opening the form
+    $("#user-record-form .invalid-feedback").hide();
+    $("#user-record-form input[type='text'], #user-record-form select").removeClass('border-danger');
+
     if(user_id == null) {
-        //in case we are adding a record - clear modal fields and errors and change the modal title
+        //in case we are adding a record - clear modal fields and change the modal title
         $("#userRecord .modal-title").text("Create user");
         $("#userRecord").attr("data-user-record-id", "");
 
