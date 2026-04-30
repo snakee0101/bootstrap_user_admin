@@ -6,9 +6,8 @@ function onUserSelectionChange(event)
     if(event.target.checked) {
         selected_user_ids.push(Number(event.target.value));
     } else {
-        selected_user_ids.splice(
-            selected_user_ids.findIndex(id => id == Number(event.target.value)),
-            1
+        selected_user_ids = selected_user_ids.filter(
+            id => id != Number(event.target.value)
         );
     }
 
