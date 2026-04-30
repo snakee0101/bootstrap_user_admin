@@ -311,25 +311,21 @@ $(document).ready(function () {
             if(Number(response.error_code) !== 0) {
                 if(response.errors['first_name']) {
                     $("#user-record-form #user-first-name").addClass('border-danger');
-                    $("#user-record-form #user-first-name ~ .invalid-feedback").text(response.errors['first_name']);
-                    $("#user-record-form #user-first-name ~ .invalid-feedback").show();
+                    $("#user-record-form #user-first-name ~ .invalid-feedback").text(response.errors['first_name']).show();
                 }
 
                 if(response.errors['last_name']) {
                     $("#user-record-form #user-last-name").addClass('border-danger');
-                    $("#user-record-form #user-last-name ~ .invalid-feedback").text(response.errors['last_name']);
-                    $("#user-record-form #user-last-name ~ .invalid-feedback").show();
+                    $("#user-record-form #user-last-name ~ .invalid-feedback").text(response.errors['last_name']).show();
                 }
 
                 if(response.errors['status']) {
-                    $("#user-record-form .user-status-container ~ .invalid-feedback").text(response.errors['status']);
-                    $("#user-record-form .user-status-container ~ .invalid-feedback").show();
+                    $("#user-record-form .user-status-container ~ .invalid-feedback").text(response.errors['status']).show();
                 }
 
                 if(response.errors['role']) {
                     $("#user-record-form #user-role").addClass('border-danger');
-                    $("#user-record-form #user-role ~ .invalid-feedback").text(response.errors['role']);
-                    $("#user-record-form #user-role ~ .invalid-feedback").show();
+                    $("#user-record-form #user-role ~ .invalid-feedback").text(response.errors['role']).show();
                 }
 
                 return;
