@@ -28,25 +28,12 @@ function onUserSelectionChange(event)
 
 class UserReactiveCollection
 {
-    users = null;
-
-    constructor(users = [])
-    {
-        this.users = new WeakMap(users);
-        console.log();
-    }
+    #users = new Map();
 
     set(record)
     {
         //user record structure: {"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
-        //Add a record to collection. users array must behave like a set (unique by user id)
-        const index = this.users.findIndex(user => user.id == record.id);
-
-        if (index === -1) {
-            this.users.unshift(record); // new
-        } else {
-            this.users[index] = record; // replace existing
-        }
+        this.#users.set(record.id, record);
 
         //update table rows - checked state must be preserved when updating the table
         let checked = selected_user_ids.indexOf(record.id) !== -1 ? 'checked' : '';
@@ -78,17 +65,12 @@ class UserReactiveCollection
 
     get(user_id)
     {
-        return this.users.find(user => user.id == user_id);
+        return this.#users.get(user_id);
     }
 
     remove(user_id)
     {
-        //remove array item
-        this.users.splice(
-            this.users.indexOf(
-                this.users.find(user => user.id == user_id)
-            ), 1
-        );
+        this.#users.delete(user_id);
 
         $(`#users_table tbody tr[data-id=${user_id}]`).remove(); //as well as the table row
     }
