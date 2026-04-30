@@ -278,22 +278,12 @@ $(document).ready(function () {
 
     //user management form needs to be modified to be able to be validated manually
     $("#user-record-form").on("submit", function(event) {
-        const form = this;   // DOM element access
-
         event.preventDefault();
         event.stopPropagation();
 
         //clear all errors before sending the form
-        $("#user-record-form #user-first-name").removeClass('border-danger');
-        $("#user-record-form #user-first-name ~ .invalid-feedback").hide();
-
-        $("#user-record-form #user-last-name").removeClass('border-danger');
-        $("#user-record-form #user-last-name ~ .invalid-feedback").hide();
-
-        $("#user-record-form .user-status-container ~ .invalid-feedback").hide();
-
-        $("#user-record-form #user-role").removeClass('border-danger');
-        $("#user-record-form #user-role ~ .invalid-feedback").hide();
+        $("#user-record-form .invalid-feedback").hide();
+        $("#user-record-form input[type='text'], #user-record-form select").removeClass('border-danger');
 
         //if no user id is specified - then we are creating a new record
         const is_creation_form = $("#userRecord").attr("data-user-record-id") == "";
