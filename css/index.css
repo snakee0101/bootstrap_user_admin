@@ -2,3 +2,35 @@ body {
     padding: 10px;
 }
 
+.google-toggle-container .google-toggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 60px;
+    height: 28px;
+    background: #d8d8d8;
+    border-radius: 30px;
+    padding: 0 2px;
+    transition: background-color 0.25s ease;
+}
+
+.google-toggle .circle {
+    background: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.25s ease;
+}
+
+.google-toggle-container input[type="checkbox"] {
+    display: none;
+}
+
+.google-toggle-container input[type="checkbox"]:checked ~ .google-toggle {
+    background: #000000;
+}
+
+.google-toggle-container input[type="checkbox"]:checked ~ .google-toggle .circle {
+    transform: translateX(32px);
+}

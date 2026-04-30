@@ -2,7 +2,7 @@ let selected_user_ids = [];
 
 class UserReactiveCollection
 {
-    users = []; //its a Map - only one copy of a record with specific id is allowed
+    users = []; //TODO: its a WeakMap? - only one copy of a record with specific id is allowed
 
     constructor(users = [])
     {
@@ -254,7 +254,7 @@ function openUserRecordModal(user_id = null)
 
         $("#user-record-form #user-first-name").val('');
         $("#user-record-form #user-last-name").val('');
-        $("#user-record-form #user-status").val('1');
+        $("#user-record-form #user-status").prop('checked', true);
         $("#user-record-form #user-role").val('user');
     } else {
         let user_record = userCollection.get(user_id);
@@ -265,7 +265,7 @@ function openUserRecordModal(user_id = null)
 
         $("#user-record-form #user-first-name").val(user_record.first_name);
         $("#user-record-form #user-last-name").val(user_record.last_name);
-        $("#user-record-form #user-status").val(user_record.status);
+        $("#user-record-form #user-status").prop("checked", Number(user_record.status) === 1);
         $("#user-record-form #user-role").val(user_record.role);
     }
 
@@ -290,8 +290,7 @@ $(document).ready(function () {
         $("#user-record-form #user-last-name").removeClass('border-danger');
         $("#user-record-form #user-last-name ~ .invalid-feedback").hide();
 
-        $("#user-record-form #user-status").removeClass('border-danger');
-        $("#user-record-form #user-status ~ .invalid-feedback").hide();
+        $("#user-record-form .user-status-container ~ .invalid-feedback").hide();
 
         $("#user-record-form #user-role").removeClass('border-danger');
         $("#user-record-form #user-role ~ .invalid-feedback").hide();
@@ -303,7 +302,7 @@ $(document).ready(function () {
         let form_data = {
             first_name: $("#user-record-form #user-first-name").val(),
             last_name: $("#user-record-form #user-last-name").val(),
-            status: $("#user-record-form #user-status").val(),
+            status: $("#user-record-form #user-status").is(':checked') ? 1 : 0,
             role: $("#user-record-form #user-role").val()
         };
 
@@ -328,9 +327,8 @@ $(document).ready(function () {
                 }
 
                 if(response.errors['status']) {
-                    $("#user-record-form #user-status").addClass('border-danger');
-                    $("#user-record-form #user-status ~ .invalid-feedback").text(response.errors['status']);
-                    $("#user-record-form #user-status ~ .invalid-feedback").show();
+                    $("#user-record-form .user-status-container ~ .invalid-feedback").text(response.errors['status']);
+                    $("#user-record-form .user-status-container ~ .invalid-feedback").show();
                 }
 
                 if(response.errors['role']) {

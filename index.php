@@ -115,11 +115,13 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <label for="user-status" class="form-label">Status</label>
-                                <select class="form-select" id="user-status">
-                                    <option selected value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
+                                <p class="mb-2">Status</p>
+                                <div class="google-toggle-container user-status-container">
+                                    <input type="checkbox" id="user-status" />
+                                    <label for="user-status" class="google-toggle">
+                                        <div class="circle"></div>
+                                    </label>
+                                </div>
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="col-md-6">
