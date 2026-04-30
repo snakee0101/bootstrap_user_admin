@@ -84,7 +84,7 @@ function deleteUser()
 {
     const user_id = $("#deleteUserConfirmation").attr("data-user-id");
 
-    $.post("http://localhost:8000/actions/delete.php?user_id=" + user_id, (data) => {
+    $.post("/actions/delete.php?user_id=" + user_id, (data) => {
         $('#deleteUserConfirmation').modal('hide');
 
         userCollection.remove(user_id);
@@ -165,7 +165,7 @@ function validateGroupAction(selected_action, user_ids)
 
 function massDeleteUsers()
 {
-    $.post(`http://localhost:8000/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
+    $.post(`/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
         const response = JSON.parse(data);
 
         if(response.status != true) {
@@ -203,7 +203,7 @@ function groupAction(group_action_id)
     if(selected_action === "activate" || selected_action === "deactivate") {
         const is_active = selected_action === "activate" ? 1 : 0;
 
-        $.post(`http://localhost:8000/group_actions/modify_active.php?status=${is_active}&users=` + selected_user_ids.join(','), (data) => {
+        $.post(`/group_actions/modify_active.php?status=${is_active}&users=` + selected_user_ids.join(','), (data) => {
             const response = JSON.parse(data);
 
             if(response.status != true) {
@@ -276,7 +276,7 @@ $(document).ready(function () {
         //if no user id is specified - then we are creating a new record
         const is_creation_form = $("#userRecord").attr("data-user-record-id") == "";
 
-        const form_url = is_creation_form ? "http://localhost:8000/actions/create.php" : "http://localhost:8000/actions/update.php";
+        const form_url = is_creation_form ? "/actions/create.php" : "/actions/update.php";
         let form_data = {
             first_name: $("#user-record-form #user-first-name").val(),
             last_name: $("#user-record-form #user-last-name").val(),
@@ -329,7 +329,7 @@ $(document).ready(function () {
     });
 
     //load initial data - Prefill users table with initial data
-    $.post("http://localhost:8000/queries/get_all_users.php", (data) => {
+    $.post("/queries/get_all_users.php", (data) => {
         const response = JSON.parse(data);
 
         for (const user_record of response) {
