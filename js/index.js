@@ -28,11 +28,12 @@ function onUserSelectionChange(event)
 
 class UserReactiveCollection
 {
-    users = []; //TODO: its a WeakMap? - only one copy of a record with specific id is allowed
+    users = null;
 
     constructor(users = [])
     {
-        this.users = users;
+        this.users = new WeakMap(users);
+        console.log();
     }
 
     set(record)
