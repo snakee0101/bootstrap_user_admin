@@ -5,12 +5,10 @@ include '../database/connection.php';
 $errors = [];
 
 //Unique validation
-$result = executeQuery("SELECT id FROM users WHERE first_name = ? AND last_name = ? AND status = ? AND role = ?", [$_POST['first_name'], $_POST['last_name'], (int)$_POST['status'], $_POST['role']]);
+$result = executeQuery("SELECT id FROM users WHERE first_name = ? AND last_name = ?", [$_POST['first_name'], $_POST['last_name']]);
 if ($result[0]["id"] != null) {
     $errors["first_name"] = "User with such credentials already exists.";
     $errors["last_name"] = "User with such credentials already exists.";
-    $errors["status"] = "User with such credentials already exists.";
-    $errors["role"] = "User with such credentials already exists.";
 }
 
 //Validation
