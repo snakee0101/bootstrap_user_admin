@@ -1,5 +1,31 @@
 let selected_user_ids = [];
 
+function onUserSelectionChange(event)
+{
+    //track selected user ids - Save/remove selected user id to/from array when checking/unchecking a checkbox in the table
+    if(event.target.checked) {
+        selected_user_ids.push(Number(event.target.value));
+    } else {
+        selected_user_ids.splice(
+            selected_user_ids.findIndex(id => id == Number(event.target.value)),
+            1
+        );
+    }
+
+    //check "Select All checkbox" if all items are checked
+    if($(`#users_table .user-selection:checked`).length === $(`#users_table .user-selection`).length) {
+        //if all items are checked - manually check "Select All" checkbox (if it is not checked yet - otherwise we end up in infinite loop)
+        if($("#selectAll").is(':checked') === false) {
+            $("#selectAll").click();
+        }
+    } else {
+        //uncheck "Select All checkbox" if any item is unchecked (if it is not unchecked yet - otherwise we end up in infinite loop)
+        if($("#selectAll").is(':checked') === true) {
+            $("#selectAll").click();
+        }
+    }
+}
+
 class UserReactiveCollection
 {
     users = []; //TODO: its a WeakMap? - only one copy of a record with specific id is allowed
@@ -21,8 +47,7 @@ class UserReactiveCollection
             this.users[index] = record; // replace existing
         }
 
-        //update table rows
-        //checked state must be preserved when updating the table
+        //update table rows - checked state must be preserved when updating the table
         let checked = selected_user_ids.indexOf(record.id) !== -1 ? 'checked' : '';
 
         const updatedRowContent = `
@@ -47,31 +72,7 @@ class UserReactiveCollection
             $(`#users_table tbody tr[data-id="${record.id}"]`).html(updatedRowContent); //otherwise - replace the row content
         }
 
-        //re-register user selection event for new row
-        $(`#users_table tbody tr[data-id="${record.id}"] .user-selection`).off('change').change((event) => {
-            //track selected user ids - Save/remove selected user id to/from array when checking/unchecking a checkbox in the table
-            if(event.target.checked) {
-                selected_user_ids.push(Number(event.target.value));
-            } else {
-                selected_user_ids.splice(
-                    selected_user_ids.findIndex(id => id == Number(event.target.value)),
-                    1
-                );
-            }
-
-            //check "Select All checkbox" if all items are checked
-            if($(`#users_table .user-selection:checked`).length === $(`#users_table .user-selection`).length) {
-                //if all items are checked - manually check "Select All" checkbox (if it is not checked yet - otherwise we end up in infinite loop)
-                if($("#selectAll").is(':checked') === false) {
-                    $("#selectAll").click();
-                }
-            } else {
-                //uncheck "Select All checkbox" if any item is unchecked (if it is not unchecked yet - otherwise we end up in infinite loop)
-                if($("#selectAll").is(':checked') === true) {
-                    $("#selectAll").click();
-                }
-            }
-        });
+        $(`#users_table tbody tr[data-id="${record.id}"] .user-selection`).off('change').change(onUserSelectionChange); //re-register user selection event for new row
     }
 
     get(user_id)
