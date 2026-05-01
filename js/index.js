@@ -1,38 +1,40 @@
 let selected_user_ids = [];
 
-function onUserSelectionChange(event)
+function updateSelectAllState()
+{
+    //use intermediate state when not all items are checked and checked state when all items are checked
+    const total = $(".user-selection").length;
+    const checked = $(".user-selection:checked").length;
+
+    $("#selectAll")
+        .prop("checked", checked === total && total > 0)
+        .prop("indeterminate", checked > 0 && checked < total);
+}
+
+function onUserSelectionChange()
 {
     //track selected user ids - Save/remove selected user id to/from array when checking/unchecking a checkbox in the table
-    if(event.target.checked) {
-        selected_user_ids.push(Number(event.target.value));
+    const id = Number(this.value);
+
+    if (this.checked) {
+        if (!selected_user_ids.includes(id)) {
+            selected_user_ids.push(id);
+        }
     } else {
-        selected_user_ids = selected_user_ids.filter(
-            id => id != Number(event.target.value)
-        );
+        selected_user_ids = selected_user_ids.filter(x => x !== id);
     }
 
-    //check "Select All checkbox" if all items are checked
-    if($(`#users_table .user-selection:checked`).length === $(`#users_table .user-selection`).length) {
-        //if all items are checked - manually check "Select All" checkbox (if it is not checked yet - otherwise we end up in infinite loop)
-        if($("#selectAll").is(':checked') === false) {
-            $("#selectAll").click();
-        }
-    } else {
-        //uncheck "Select All checkbox" if any item is unchecked (if it is not unchecked yet - otherwise we end up in infinite loop)
-        if($("#selectAll").is(':checked') === true) {
-            $("#selectAll").click();
-        }
-    }
+    updateSelectAllState();
 }
 
 class UserReactiveCollection
 {
-    #users = new Map();
+    users = new Map();
 
     set(record)
     {
         //user record structure: {"id":5,"first_name":"Charlie","last_name":"Davis","status":1,"role":"admin"}
-        this.#users.set(record.id, record);
+        this.users.set(record.id, record);
 
         //update table rows - checked state must be preserved when updating the table
         let checked = selected_user_ids.indexOf(record.id) !== -1 ? 'checked' : '';
@@ -60,18 +62,21 @@ class UserReactiveCollection
         }
 
         $(`#users_table tbody tr[data-id="${record.id}"] .user-selection`).off('change').change(onUserSelectionChange); //re-register user selection event for new row
+
+        updateSelectAllState();
     }
 
     get(user_id)
     {
-        return this.#users.get(user_id);
+        return this.users.get(user_id);
     }
 
     remove(user_id)
     {
-        this.#users.delete(user_id);
+        this.users.delete(user_id);
 
         $(`#users_table tbody tr[data-id=${user_id}]`).remove(); //as well as the table row
+        updateSelectAllState();
     }
 }
 
@@ -100,18 +105,14 @@ function getStatusClassname(is_active)
 function registerGlobalEvents()
 {
     //When "Select All" checkbox ends up is checked state - manually click on those checkboxes that are unchecked (so it works only one-way)
-    $("#selectAll").change(function (event) {
-        const targetCheckedState = event.target.checked;
-
-        if (targetCheckedState === false) {
-            return;  //when Select All checkbox is unchecked no selection should be lost
-        }
+    $("#selectAll").change(function () {
+        const targetCheckedState = this.checked;
 
         $("#users_table .user-selection").each(function () {
-            if (this.checked === false) {
-                $(this).prop("checked", true).trigger("change");
-            }
+            $(this).prop("checked", targetCheckedState);
         });
+
+        selected_user_ids = targetCheckedState ? userCollection.users.keys().toArray() : [];
     });
 
     //user deletion modal
