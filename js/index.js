@@ -54,7 +54,7 @@ class UserReactiveCollection
           </td>`;
 
         if($(`#users_table tbody tr[data-id="${record.id}"]`).length === 0) {
-            $("#users_table tbody").prepend(`<tr data-id="${record.id}">${updatedRowContent}</tr>`); //if the row with this user id doesn't exist in the table - create a row
+            $("#users_table tbody").append(`<tr data-id="${record.id}">${updatedRowContent}</tr>`); //if the row with this user id doesn't exist in the table - create a row
         } else {
             $(`#users_table tbody tr[data-id="${record.id}"]`).html(updatedRowContent); //otherwise - replace the row content
         }
