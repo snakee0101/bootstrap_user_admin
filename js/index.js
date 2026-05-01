@@ -278,24 +278,24 @@ $(document).ready(function () {
         $.post(form_url, form_data, (data) => {
             const response = JSON.parse(data);
 
-            if(Number(response.error_code) !== 0) {
-                if(response.errors['first_name']) {
+            if(response.error !== null) {
+                if(response.error.message.findIndex(message_object => message_object.field == "first_name") !== -1) {
                     $("#user-record-form #user-first-name").addClass('border-danger');
-                    $("#user-record-form #user-first-name ~ .invalid-feedback").text(response.errors['first_name']).show();
+                    $("#user-record-form #user-first-name ~ .invalid-feedback").text(response.error.message.find(message_object => message_object.field == "first_name").message).show();
                 }
 
-                if(response.errors['last_name']) {
+                if(response.error.message.findIndex(message_object => message_object.field == "last_name") !== -1) {
                     $("#user-record-form #user-last-name").addClass('border-danger');
-                    $("#user-record-form #user-last-name ~ .invalid-feedback").text(response.errors['last_name']).show();
+                    $("#user-record-form #user-last-name ~ .invalid-feedback").text(response.error.message.find(message_object => message_object.field == "last_name").message).show();
                 }
 
-                if(response.errors['status']) {
-                    $("#user-record-form .user-status-container ~ .invalid-feedback").text(response.errors['status']).show();
+                if(response.error.message.findIndex(message_object => message_object.field == "status") !== -1) {
+                    $("#user-record-form .user-status-container ~ .invalid-feedback").text(response.error.message.find(message_object => message_object.field == "status").message).show();
                 }
 
-                if(response.errors['role']) {
+                if(response.error.message.findIndex(message_object => message_object.field == "role") !== -1) {
                     $("#user-record-form #user-role").addClass('border-danger');
-                    $("#user-record-form #user-role ~ .invalid-feedback").text(response.errors['role']).show();
+                    $("#user-record-form #user-role ~ .invalid-feedback").text(response.error.message.find(message_object => message_object.field == "role").message).show();
                 }
 
                 return;
