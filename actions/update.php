@@ -26,7 +26,6 @@ if(empty($errors) === false) {
         "status" => false,
         "error_code" => 422,
         "errors" => $errors,
-        "user" => ""
     ]);
 
     return;
