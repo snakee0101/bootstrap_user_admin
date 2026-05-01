@@ -34,3 +34,8 @@ body {
 .google-toggle-container input[type="checkbox"]:checked ~ .google-toggle .circle {
     transform: translateX(32px);
 }
+
+#user-record-form.row {
+    margin-left: 0!important;
+    margin-right: 0!important;
+}
