@@ -306,11 +306,6 @@ $(document).ready(function () {
             );
             userRecordModal.hide();
 
-            const successAlertModal = new bootstrap.Modal(document.getElementById('successAlert'), {});
-            const modalText = is_creation_form ? "The user was successfully created" : "The user was successfully updated";
-            $("#successAlert .modal-body").text(modalText);
-            successAlertModal.show();
-
             userCollection.set(response.user);
         });
     });
