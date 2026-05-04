@@ -60,7 +60,6 @@ executeStatement(
 
 echo json_encode([
     "status" => true,
-    "error_code" => 0,
     "error" => null,
     "user" => [
         "id" => $user_id,

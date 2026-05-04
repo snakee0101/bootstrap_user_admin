@@ -39,3 +39,13 @@ body {
     margin-left: 0!important;
     margin-right: 0!important;
 }
+
+#users_table td, #users_table th {
+    background: transparent;
+    transition: 0.5s;
+}
+
+.flash {
+    background: #ffe58f!important;
+    transition: 0.5s;
+}

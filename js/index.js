@@ -1,5 +1,15 @@
 let selected_user_ids = [];
 
+function flashRow(record_id) {
+    //since row is not inserted immediately - we need a timeout
+    setTimeout(() => {
+        const row = $(`#users_table tbody tr[data-id="${record_id}"] td, #users_table tbody tr[data-id="${record_id}"] th`);
+
+        row.addClass('flash');
+        setTimeout(() => row.removeClass('flash'), 600);
+    }, 100);
+}
+
 function updateSelectAllState()
 {
     //use intermediate state when not all items are checked and checked state when all items are checked
@@ -207,6 +217,8 @@ function groupAction(group_action_id)
                 //patch each record
                 let user_record = userCollection.get(user_id);
                 userCollection.set({...user_record, status: is_active});
+
+                flashRow(user_id);
             }
         })
     }
@@ -279,7 +291,7 @@ $(document).ready(function () {
         $.post(form_url, form_data, (data) => {
             const response = JSON.parse(data);
 
-            if(response.error !== null || response.errors !== null) {
+            if(response.error != null || response.errors != null) {
                 const errors = response.error ? [response.error] : response.errors;
                 let error = null;
 
@@ -310,7 +322,14 @@ $(document).ready(function () {
             );
             userRecordModal.hide();
 
+            if(is_creation_form === true) {
+                flashRow(response.user.id);
+            }
+
             userCollection.set(response.user);
+            if(is_creation_form === false) {
+                flashRow($("#userRecord").attr("data-user-record-id"));
+            }
         });
     });
 
