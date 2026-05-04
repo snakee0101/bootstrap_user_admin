@@ -201,7 +201,10 @@ function groupAction(group_action_id)
     if(selected_action === "activate" || selected_action === "deactivate") {
         const is_active = selected_action === "activate" ? 1 : 0;
 
-        $.post(`/group_actions/modify_active.php?status=${is_active}&users=` + selected_user_ids.join(','), (data) => {
+        $.post('/group_actions/modify_active.php', {
+            users: selected_user_ids,
+            status: is_active
+        }).done((data) => {
             const response = JSON.parse(data);
 
             if(response.status != true) {
