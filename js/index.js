@@ -12,13 +12,10 @@ function flashRow(record_id) {
 
 function updateSelectAllState()
 {
-    //use intermediate state when not all items are checked and checked state when all items are checked
     const total = $(".user-selection").length;
     const checked = $(".user-selection:checked").length;
 
-    $("#selectAll")
-        .prop("checked", checked === total && total > 0)
-        .prop("indeterminate", checked > 0 && checked < total);
+    $("#selectAll").prop("checked", total > 0 && checked === total);
 }
 
 function onUserSelectionChange()
@@ -48,6 +45,12 @@ class UserReactiveCollection
 
         //update table rows - checked state must be preserved when updating the table
         let checked = selected_user_ids.indexOf(record.id) !== -1 ? 'checked' : '';
+
+        //also auto-check new row if "Select All" checkbox is checked
+        if($("#selectAll").is(":checked")) {
+            checked = "checked";
+            selected_user_ids.push(record.id);
+        }
 
         const updatedRowContent = `
           <th>
@@ -123,7 +126,9 @@ function registerGlobalEvents()
             $(this).prop("checked", targetCheckedState);
         });
 
-        selected_user_ids = targetCheckedState ? userCollection.users.keys().toArray() : [];
+        selected_user_ids = targetCheckedState
+            ? Array.from(userCollection.users.keys())
+            : [];
     });
 
     //user deletion modal
