@@ -50,8 +50,8 @@ class UserReactiveCollection
               <i class="bi bi-circle-fill ${getStatusClassname(record.status)}"></i>
           </td>
           <td>${record.role}</td>
-          <td class="d-flex gap-3">
-            <a href="#" onclick="openUserRecordModal(${record.id})" class="mr-4"><i class="bi bi-pencil-square"></i></a>
+          <td>
+            <a href="#" onclick="openUserRecordModal(${record.id})" class="me-2"><i class="bi bi-pencil-square"></i></a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmation" data-bs-user-id="${record.id}" data-bs-username="${record.first_name} ${record.last_name}"><i class="bi bi-trash3 text-danger"></i></a>
           </td>`;
 
