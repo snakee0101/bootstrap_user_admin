@@ -87,6 +87,8 @@ class UserReactiveCollection
 
         $(`#users_table tbody tr[data-id=${user_id}]`).remove(); //as well as the table row
         updateSelectAllState();
+
+        selected_user_ids = selected_user_ids.filter(id => id != user_id);
     }
 }
 
@@ -102,7 +104,6 @@ function deleteUser()
         $('#deleteUserConfirmation').modal('hide');
 
         userCollection.remove(user_id);
-        selected_user_ids = [];
     });
 }
 
@@ -163,7 +164,9 @@ function validateGroupAction(selected_action, user_ids)
 
 function massDeleteUsers()
 {
-    $.post(`/group_actions/delete.php?users=` + selected_user_ids.join(','), (data) => {
+    $.post(`/group_actions/delete.php`, {
+        users: selected_user_ids
+    }).done((data) => {
         const response = JSON.parse(data);
 
         if(response.status != true) {
@@ -183,9 +186,6 @@ function massDeleteUsers()
             document.getElementById('userMassDeletionConfirmation')
         );
         confirmationModal.hide();
-
-        selected_user_ids = [];
-        $("#selectAll").prop('checked', false);
     })
 }
 

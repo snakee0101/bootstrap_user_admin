@@ -35,6 +35,6 @@ if ($result === false) {
     echo json_encode([
         "status" => true,
         "error" => null,
-        "id" => $_GET["users"]
+        "id" => count($_POST["users"]) == 1 ? $_POST["users"][0] : $_POST["users"]
     ]);
 }

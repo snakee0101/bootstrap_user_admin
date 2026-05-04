@@ -3,7 +3,9 @@
 include '../database/connection.php';
 
 //validation - user ids must be positive integers separated by comma
-if (preg_match('/^\d+(,\d+)*$/', $_GET["users"]) == false) {
+$user_id_list_str = implode(",", $_POST["users"]);
+
+if (preg_match('/^\d+(,\d+)*$/', $user_id_list_str) == false) {
     echo json_encode([
         "status" => false,
         "error" => [
@@ -16,7 +18,7 @@ if (preg_match('/^\d+(,\d+)*$/', $_GET["users"]) == false) {
 }
 
 //Delete multiple users
-$result = executeStatement("DELETE FROM users WHERE id IN ({$_GET["users"]});", []);
+$result = executeStatement("DELETE FROM users WHERE id IN ({$user_id_list_str});", []);
 
 if ($result === false) {
     http_response_code(500);
@@ -32,6 +34,6 @@ if ($result === false) {
     echo json_encode([
         "status" => true,
         "error" => null,
-        "id" => $_GET["users"]
+        "id" => count($_POST["users"]) == 1 ? $_POST["users"][0] : $_POST["users"]
     ]);
 }
